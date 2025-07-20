@@ -1,4 +1,5 @@
-import mongoose from 'mongoose';
+// db/initMongoConnection.js
+import mongoose from "mongoose";
 
 export const initMongoConnection = async () => {
   const { MONGODB_USER, MONGODB_PASSWORD, MONGODB_URL, MONGODB_DB } =
@@ -8,9 +9,9 @@ export const initMongoConnection = async () => {
 
   try {
     await mongoose.connect(connectionString);
-    console.log('Mongo connection successfully established!');
+    console.log("✅ Mongo connection successfully established!");
   } catch (error) {
-    console.error('Mongo connection error:', error.message);
+    console.error("❌ Mongo connection error:", error.message);
     process.exit(1);
   }
 };
