@@ -25,11 +25,11 @@ const getAll = async (req, res) => {
     .skip(skip)
     .limit(parseInt(perPage));
 
-  res.json({
+  res.status(200).json({
     status: 200,
     message: 'Successfully found contacts!',
     data: {
-      data: contacts,
+      contacts,
       page: Number(page),
       perPage: Number(perPage),
       totalItems,
@@ -42,7 +42,11 @@ const getAll = async (req, res) => {
 
 const create = async (req, res) => {
   const contact = await Contact.create(req.body);
-  res.status(201).json(contact);
+  res.status(201).json({
+    status: 201,
+    message: 'Contact successfully created',
+    data: contact,
+  });
 };
 
 const update = async (req, res) => {
@@ -50,28 +54,58 @@ const update = async (req, res) => {
   const updated = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
   });
+
   if (!updated) {
-    return res.status(404).json({ status: 404, message: 'Contact not found' });
+    return res.status(404).json({
+      status: 404,
+      message: 'Contact not found',
+      data: null,
+    });
   }
-  res.json(updated);
+
+  res.json({
+    status: 200,
+    message: 'Contact updated successfully',
+    data: updated,
+  });
 };
 
 const getById = async (req, res) => {
   const { contactId } = req.params;
   const contact = await Contact.findById(contactId);
+
   if (!contact) {
-    return res.status(404).json({ status: 404, message: 'Contact not found' });
+    return res.status(404).json({
+      status: 404,
+      message: 'Contact not found',
+      data: null,
+    });
   }
-  res.json(contact);
+
+  res.json({
+    status: 200,
+    message: 'Contact retrieved successfully',
+    data: contact,
+  });
 };
 
 const remove = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndDelete(contactId);
+
   if (!result) {
-    return res.status(404).json({ status: 404, message: 'Contact not found' });
+    return res.status(404).json({
+      status: 404,
+      message: 'Contact not found',
+      data: null,
+    });
   }
-  res.json({ message: 'Contact deleted' });
+
+  res.json({
+    status: 200,
+    message: 'Contact deleted successfully',
+    data: result,
+  });
 };
 
 export { getAll, create, update, getById, remove };
