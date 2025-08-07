@@ -1,5 +1,5 @@
-// db/initMongoConnection.js
 import mongoose from "mongoose";
+import 'dotenv/config.js';
 
 export const initMongoConnection = async () => {
   const { MONGODB_USER, MONGODB_PASSWORD, MONGODB_URL, MONGODB_DB } =
