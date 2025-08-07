@@ -1,7 +1,13 @@
-import pino from 'pino-http';
+import pinoHttp from 'pino-http';
 
-export const logger = pino({
-  transport: {
-    target: 'pino-pretty',
-  },
-});
+const logger = pinoHttp(
+  process.env.NODE_ENV === 'development'
+    ? {
+        transport: {
+          target: 'pino-pretty',
+        },
+      }
+    : {}    
+);
+
+export default logger;
