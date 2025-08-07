@@ -1,11 +1,31 @@
-import express from 'express';
-import * as controller from '../controllers/auth.js';
+import { Router } from 'express';
 
-const router = express.Router();
+import {
+  registerController,
+  loginController,
+  refreshSessionController,
+  logoutController,
+} from '../controllers/auth.js';
+import { authRegisterSchema, authLoginSchema } from '../validation/auth.js';
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+import { validateBody } from '../middlewares/validateBody.js';
 
-router.post('/register', controller.register);
-router.post('/login', controller.login);
-router.post('/refresh', controller.refresh);
-router.post('/logout', controller.logout);
+const router = Router();
+
+router.post(
+  '/register',
+  validateBody(authRegisterSchema),
+  ctrlWrapper(registerController),
+);
+
+router.post(
+  '/login',
+  validateBody(authLoginSchema),
+  ctrlWrapper(loginController),
+);
+
+router.post('/refresh', ctrlWrapper(refreshSessionController));
+
+router.post('/logout', ctrlWrapper(logoutController));
 
 export default router;
