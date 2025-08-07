@@ -3,7 +3,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 
-import authRouter from './src/routers/auth.js';
+import authRouter from './routers/auth.js';
+import contactsRouter from './routers/contacts.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,6 +12,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cookieParser());
 app.use('/auth', authRouter);
+app.use('/contacts', contactsRouter);
 
 app.use((err, req, res, next) => {
   const { status = 500, message = 'Internal Server Error' } = err;
