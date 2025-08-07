@@ -10,7 +10,7 @@ const contactsSchema = new Schema(
       maxLength: 20,
       required: true,
     },
-    phoneNumber: {
+    phone: {
       type: String,
       minLength: 3,
       maxLength: 20,
@@ -41,6 +41,6 @@ contactsSchema.post('save', handleSaveError);
 contactsSchema.pre('findOneAndUpdate', setUpdateSettings);
 contactsSchema.post('findOneAndUpdate', handleSaveError);
 
-export const sortByList = ['name', 'phoneNumber', 'email'];
+export const sortByList = ['name', 'phone', 'email'];
 
 export const ContactsCollection = model('contacts', contactsSchema);
