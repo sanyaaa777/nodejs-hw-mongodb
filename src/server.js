@@ -1,28 +1,27 @@
-import express from "express";
-import dotenv from "dotenv";
-import { initMongoConnection } from "./db/initMongoConnection.js";
-import contactsRouter from "./routers/contacts.js";
+import express from 'express';
+import cors from 'cors';
 
+import { env } from './utils/env.js';
+import contactsRouter from './routers/contacts.js';
+import { logger } from './middlewares/logger.js';
+import { errorHandler } from './middlewares/errorHandler.js';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
-dotenv.config();
+export function setupServer() {
+  const app = express();
+  app.use(express.json());
+  app.use(logger);
+  app.use(cors());
 
-const app = express();
+  app.use('/contacts', contactsRouter);
 
-app.use(express.json());
-app.use("/contacts", contactsRouter);
+  app.use(notFoundHandler);
 
-const PORT = process.env.PORT || 3000;
+  app.use(errorHandler);
 
-const start = async () => {
-  try {
-    await initMongoConnection();
-    app.listen(PORT, () => {
-      console.log(`✅ Server running on port ${PORT}`);
-    });
-  } catch (err) {
-    console.error("❌ Failed to start server:", err.message);
-    process.exit(1);
-  }
-};
+  const PORT = Number(env('PORT', 3000));
 
-start();
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
