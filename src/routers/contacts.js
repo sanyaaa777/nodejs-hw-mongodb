@@ -10,10 +10,7 @@ import {
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { isValidId } from '../middlewares/isValidId.js';
-import {
-  createContactSchema,
-  updateContactSchema,
-} from '../validation/contacts.js';
+import { contactSchema as createContactSchema, updateContactSchema } from '../validation/contacts.js';
 
 const router = Router();
 
