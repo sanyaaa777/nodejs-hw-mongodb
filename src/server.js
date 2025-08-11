@@ -11,6 +11,13 @@ import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
 export function setupServer() {
   const app = express();
+app.use((req, _res, next) => {
+  if (req.originalUrl.startsWith('/contacts')) {
+    console.log('> ', req.method, req.originalUrl);
+    console.log('Content-Type:', req.headers['content-type']);
+  }
+  next();
+});
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));

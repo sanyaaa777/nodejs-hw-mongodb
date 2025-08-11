@@ -64,6 +64,10 @@ export const createContactController = async (req, res) => {
     message: 'Successfully created contact!',
     data: contact,
   });
+  console.log('BODY:', req.body);
+console.log('KEYS:', Object.keys(req.body));
+console.log('FILE:', req.file?.originalname, req.file?.path);
+
 };
 
 export const patchContactController = async (req, res, next) => {
