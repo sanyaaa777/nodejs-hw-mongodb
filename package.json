@@ -31,9 +31,12 @@
   },
   "homepage": "https://github.com/sanyaaa777/nodejs-hw-mongodb#readme",
   "dependencies": {
+<<<<<<< HEAD
     "bcrypt": "^6.0.0",
     "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.7",
+=======
+>>>>>>> parent of 97c0279 (hw-05f)
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^17.0.1",
