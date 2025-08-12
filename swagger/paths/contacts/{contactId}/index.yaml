@@ -1,0 +1,81 @@
+get:
+  tags: [Contacts]
+  summary: Get contact by ID
+  operationId: getContactById
+  security: [{ bearerAuth: [] }]
+  parameters:
+    - in: path
+      name: contactId
+      required: true
+      schema: { type: string }
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../docs/openapi.yaml#/components/schemas/Contact
+    '404':
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../docs/openapi.yaml#/components/schemas/Error
+
+patch:
+  tags: [Contacts]
+  summary: Update contact
+  operationId: patchContact
+  security: [{ bearerAuth: [] }]
+  parameters:
+    - in: path
+      name: contactId
+      required: true
+      schema: { type: string }
+  requestBody:
+    required: false
+    content:
+      application/json:
+        schema:
+          $ref: ../../../../docs/openapi.yaml#/components/schemas/ContactUpdate
+      multipart/form-data:
+        schema:
+          allOf:
+            - $ref: ../../../../docs/openapi.yaml#/components/schemas/ContactUpdate
+          properties:
+            photo:
+              type: string
+              format: binary
+  responses:
+    '200':
+      description: Updated
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../docs/openapi.yaml#/components/schemas/Contact
+    '404':
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../docs/openapi.yaml#/components/schemas/Error
+
+delete:
+  tags: [Contacts]
+  summary: Delete contact
+  operationId: deleteContact
+  security: [{ bearerAuth: [] }]
+  parameters:
+    - in: path
+      name: contactId
+      required: true
+      schema: { type: string }
+  responses:
+    '204':
+      description: No Content
+    '404':
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: ../../../../docs/openapi.yaml#/components/schemas/Error
