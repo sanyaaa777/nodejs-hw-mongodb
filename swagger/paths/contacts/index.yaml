@@ -2,6 +2,7 @@ get:
   tags: [Contacts]
   summary: Get list of contacts
   operationId: getContacts
+  description: Returns contacts with pagination meta (module 4 style).
   security: [{ bearerAuth: [] }]
   parameters:
     - in: query
@@ -28,40 +29,50 @@ get:
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: ../../../docs/openapi.yaml#/components/schemas/Contact
+            $ref: ../../../docs/openapi.yaml#/components/schemas/ApiContactsListResponse
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../../../docs/openapi.yaml#/components/schemas/ApiErrorResponse
 
 post:
   tags: [Contacts]
   summary: Create a contact
   operationId: createContact
-  description: Accepts JSON or multipart/form-data for photo upload.
+  description: Accepts multipart/form-data with optional photo upload.
   security: [{ bearerAuth: [] }]
   requestBody:
     required: true
     content:
-      application/json:
-        schema:
-          $ref: ../../../docs/openapi.yaml#/components/schemas/ContactCreate
       multipart/form-data:
         schema:
-          allOf:
-            - $ref: ../../../docs/openapi.yaml#/components/schemas/ContactCreate
+          type: object
+          required: [name, phoneNumber, contactType]
           properties:
-            photo:
-              type: string
-              format: binary
+            name: { type: string, minLength: 3, maxLength: 20 }
+            phoneNumber: { type: string, minLength: 3, maxLength: 20 }
+            email: { type: [string, 'null'], format: email }
+            contactType: { type: string, enum: [home, work, other] }
+            isFavourite: { type: boolean, default: false }
+            photo: { type: string, format: binary }
   responses:
     '201':
       description: Created
       content:
         application/json:
           schema:
-            $ref: ../../../docs/openapi.yaml#/components/schemas/Contact
+            $ref: ../../../docs/openapi.yaml#/components/schemas/ApiContactResponse
     '400':
       description: Validation error
       content:
         application/json:
           schema:
-            $ref: ../../../docs/openapi.yaml#/components/schemas/Error
+            $ref: ../../../docs/openapi.yaml#/components/schemas/ApiErrorResponse
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: ../../../docs/openapi.yaml#/components/schemas/ApiErrorResponse
