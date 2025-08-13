@@ -2,6 +2,7 @@ get:
   tags: [Contacts]
   summary: Get contact by ID
   operationId: getContactById
+  description: Returns a single contact wrapped in { status, message, data }.
   security: [{ bearerAuth: [] }]
   parameters:
     - in: path
@@ -32,6 +33,7 @@ patch:
   tags: [Contacts]
   summary: Update contact
   operationId: patchContact
+  description: Accepts only multipart/form-data; updates only explicitly sent fields.
   security: [{ bearerAuth: [] }]
   parameters:
     - in: path
