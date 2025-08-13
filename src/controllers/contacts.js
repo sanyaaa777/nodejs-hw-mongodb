@@ -12,11 +12,11 @@ import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseContactFilterParams } from '../utils/parseContactFilterParams.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
-export const getContactsController = async (req, res, next) => {
+export const getContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query, sortByList);
   const filter = parseContactFilterParams(req.query);
-  const data = await getContacts({
+  const result = await getContacts({
     page,
     perPage,
     sortBy,
@@ -24,10 +24,31 @@ export const getContactsController = async (req, res, next) => {
     filter,
     userId: req.user._id,
   });
+
+  const {
+    data: contacts,
+    page: curPage,
+    perPage: curPerPage,
+    totalItems,
+    totalPages,
+    hasPreviousPage,
+    hasNextPage,
+  } = result;
+
   res.status(200).json({
     status: 200,
     message: 'Successfully found contacts!',
-    data,
+    data: {
+      contacts,
+      pagination: {
+        page: curPage,
+        perPage: curPerPage,
+        totalItems,
+        totalPages,
+        hasPrevPage: hasPreviousPage,
+        hasNextPage,
+      },
+    },
   });
 };
 
