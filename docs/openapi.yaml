@@ -1,92 +1,55 @@
 openapi: 3.1.0
 info:
   version: 1.0.0
-  title: Students app
+  title: Contacts app
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  description: This is a documentation of students app
-
-servers:
-  - url: http://localhost:3000
-  - url: https://nodejs-hw-mongodb-qh82.onrender.com
-
+  description: This is a documentation of contacts app
 tags:
   - name: Contacts
-    description: Contacts management
-
+    description: Contacts operations.
+  - name: Auth
+    description: Auth operations.
+servers:
+  - url: https://nodejs-hw-mongodb-1-s5w7.onrender.com
+  - url: http://localhost:3000
 paths:
   /contacts:
-    $ref: ../swagger/paths/contacts/index.yaml
+    get:
+      $ref: ../swagger/paths/contacts/get.yaml
+    post:
+      $ref: ../swagger/paths/contacts/post.yaml
   /contacts/{contactId}:
-    $ref: ../swagger/paths/contacts/{contactId}/index.yaml
+    get:
+      $ref: ../swagger/paths/contacts/{contactId}/get.yaml
+    put:
+      $ref: ../swagger/paths/contacts/{contactId}/put.yaml
+    patch:
+      $ref: ../swagger/paths/contacts/{contactId}/patch.yaml
+    delete:
+      $ref: ../swagger/paths/contacts/{contactId}/delete.yaml
+  /auth/register:
+    post:
+      $ref: ../swagger/paths/auth/register.yaml
+  /auth/login:
+    post:
+      $ref: ../swagger/paths/auth/login.yaml
+  /auth/refresh:
+    post:
+      $ref: ../swagger/paths/auth/refresh.yaml
+  /auth/logout:
+    post:
+      $ref: ../swagger/paths/auth/logout.yaml
+  /auth/send-reset-email:
+    post:
+      $ref: ../swagger/paths/auth/send-reset-email.yaml
+  /auth/reset-pwd:
+    post:
+      $ref: ../swagger/paths/auth/reset-pwd.yaml
 
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT
-
-  schemas:
-    Contact:
-      type: object
-      properties:
-        _id: { type: string, description: Mongo ObjectId }
-        name: { type: string }
-        phoneNumber: { type: string }
-        email: { type: [string, 'null'], format: email }
-        contactType: { type: string, enum: [home, work, other] }
-        isFavourite: { type: boolean }
-        photo: { type: [string, 'null'], description: Cloudinary secure_url }
-        createdAt: { type: string, format: date-time }
-        updatedAt: { type: string, format: date-time }
-      required: [_id, name, phoneNumber, contactType, isFavourite]
-
-    Pagination:
-      type: object
-      properties:
-        page: { type: integer, minimum: 1, example: 1 }
-        perPage: { type: integer, minimum: 1, example: 10 }
-        totalItems: { type: integer, minimum: 0, example: 123 }
-        totalPages: { type: integer, minimum: 1, example: 13 }
-        hasNextPage: { type: boolean, example: true }
-        hasPrevPage: { type: boolean, example: false }
-      required: [page, perPage, totalItems, totalPages, hasNextPage, hasPrevPage]
-
-    ContactsListData:
-      type: object
-      properties:
-        contacts:
-          type: array
-          items: { $ref: '#/components/schemas/Contact' }
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-      required: [contacts, pagination]
-
-    ApiContactsListResponse:
-      type: object
-      required: [status, message, data]
-      properties:
-        status: { type: integer, example: 200 }
-        message: { type: string, example: Successfully found contacts! }
-        data:
-          $ref: '#/components/schemas/ContactsListData'
-
-    ApiContactResponse:
-      type: object
-      required: [status, message, data]
-      properties:
-        status: { type: integer, example: 200 }
-        message: { type: string, example: Successfully found contact! }
-        data:
-          $ref: '#/components/schemas/Contact'
-
-    ApiErrorResponse:
-      type: object
-      required: [status, message]
-      properties:
-        status: { type: integer, example: 400 }
-        message: { type: string, example: Validation error }
-        data:
-          description: Extra error details (optional)
