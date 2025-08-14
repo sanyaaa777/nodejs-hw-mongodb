@@ -12,11 +12,11 @@ import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseContactFilterParams } from '../utils/parseContactFilterParams.js';
 import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
-export const getContactsController = async (req, res) => {
+export const getContactsController = async (req, res, next) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query, sortByList);
   const filter = parseContactFilterParams(req.query);
-  const result = await getContacts({
+  const data = await getContacts({
     page,
     perPage,
     sortBy,
@@ -24,31 +24,10 @@ export const getContactsController = async (req, res) => {
     filter,
     userId: req.user._id,
   });
-
-  const {
-    data: contacts,
-    page: curPage,
-    perPage: curPerPage,
-    totalItems,
-    totalPages,
-    hasPreviousPage,
-    hasNextPage,
-  } = result;
-
   res.status(200).json({
     status: 200,
     message: 'Successfully found contacts!',
-    data: {
-      contacts,
-      pagination: {
-        page: curPage,
-        perPage: curPerPage,
-        totalItems,
-        totalPages,
-        hasPrevPage: hasPreviousPage,
-        hasNextPage,
-      },
-    },
+    data,
   });
 };
 
@@ -85,10 +64,6 @@ export const createContactController = async (req, res) => {
     message: 'Successfully created contact!',
     data: contact,
   });
-  console.log('BODY:', req.body);
-console.log('KEYS:', Object.keys(req.body));
-console.log('FILE:', req.file?.originalname, req.file?.path);
-
 };
 
 export const patchContactController = async (req, res, next) => {
