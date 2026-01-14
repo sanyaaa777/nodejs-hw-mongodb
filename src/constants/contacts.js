@@ -1,5 +1,4 @@
-import path from "path";
-import { fileURLToPath } from "url";
+import path from 'node:path';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-export const PATH_DB = path.join(__dirname, ("..", "db", "db.json"));
+export const contactTypesList = ['work', 'home', 'personal'];
+export const TEMP_UPLOAD_DIR = path.join(process.cwd(), 'temp');
